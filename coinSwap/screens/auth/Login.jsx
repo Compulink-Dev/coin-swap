@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,16 +15,70 @@ import BottomNavigation from '../../navigation/BottomNavigation';
 import FillButton from '../../components/FillButton';
 import BackButton from '../../components/BackButton';
 import { COLORS } from '../../constants';
+import { AuthContext } from '../../context/auth-context';
+import Toast from 'react-native-toast-message';
+
 
 const Login = props => {
   // const {navigation} = props;
   const navigation = useNavigation();
 
-  const Email = () => {
+
+  const Email = ({ mail }) => {
+
+
+    const [email, setEmail] = useState()
+    const [errors, setErrors] = useState({})
+
+    const validateForm = () => {
+      let errors = {}
+
+      if (!email) errors.email = 'Email is required'
+
+      setErrors(errors)
+
+      return Object.keys(errors).length === 0
+    }
+
+    const handleSubmit = () => {
+      if (validateForm()) {
+        console.log('Submitted', email);
+        setEmail('')
+        setErrors({})
+        navigation.navigate('Code')
+      }
+      else {
+        showErrorToast()
+      }
+    }
+
+    const onChangeEmail = (email) => {
+      setEmail(email)
+      console.log(email);
+    }
+
+    const showErrorToast = () => {
+      Toast.show({
+        type: 'error',
+        text1: 'Error logging in',
+        text2: 'Please enter correct email',
+        visibilityTime: 2000
+      })
+    }
+
     return (
       <View style={[tw``]}>
         <View>
-          <TextInput style={styles.input} placeholder="Email" />
+          <TextInput
+            style={[styles.input, tw`w-full`]}
+            placeholder="Email"
+            secureTextEntry={false}
+            value={email}
+            onChangeText={onChangeEmail}
+          />
+          {
+            errors.email ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.email}</Text> : null
+          }
         </View>
         {/***************** FORGOT PASSWORD BUTTON *****************/}
         <View style={[tw`flex items-start w-full`]}>
@@ -45,20 +99,93 @@ const Login = props => {
           </TouchableOpacity>
         </View>
 
+        <View style={[tw`w-full pt-32`]}>
+          {/******************** LOGIN BUTTON *********************/}
+
+          <FillButton
+            name={'Login'}
+            onPress={() => {
+              handleSubmit()
+            }}
+          />
+        </View>
+
       </View>
     );
   };
 
-  const Phone = () => {
+  const Phone = ({ phone }) => {
+
+
+    const [phoneNumber, setPhoneNumber] = useState()
+    const [errors, setErrors] = useState({})
+
+    const validateForm = () => {
+      let errors = {}
+
+      if (!phoneNumber) errors.phoneNumber = 'Phone number is required'
+
+      setErrors(errors)
+
+      return Object.keys(errors).length === 0
+    }
+
+    const handleSubmit = () => {
+      if (validateForm()) {
+        console.log('Submitted', phoneNumber);
+        setPhoneNumber('')
+        setErrors({})
+        navigation.navigate('Code')
+      }
+      else {
+        showErrorToast()
+      }
+    }
+
+
+    const onChangePhone = (number) => {
+      setPhoneNumber(number)
+      console.log('+263' + number);
+      phone = number
+    }
+
+    const showErrorToast = () => {
+      Toast.show({
+        type: 'error',
+        text1: 'Error logging in',
+        text2: 'Please enter the correct phone number',
+        visibilityTime: 2000
+      })
+    }
+
+    const showSuccessToast = () => {
+      Toast.show({
+        type: 'success',
+        text1: 'Credit payment successful',
+        text2: 'Transaction finished successfully',
+        visibilityTime: 2000
+      })
+    }
+
+
     return (
       <View style={[tw`w-full`]}>
-        <View style={[tw``]}>
+        <View style={[tw`flex flex-row items-center`]}>
+          <Text style={{ marginRight: 8, fontWeight: 'bold', color: 'black' }}>{"+263 |"}</Text>
           <TextInput
-            style={styles.input}
-            placeholder="Phone Number"
+            style={[styles.input, tw``, { color: 'black' }]}
+            placeholder="778 191 278"
             focusable={true}
             keyboardType='number-pad'
+            value={phoneNumber}
+            onChangeText={onChangePhone}
           />
+
+        </View>
+        <View>
+          {
+            errors.phoneNumber ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.phoneNumber}</Text> : null
+          }
         </View>
 
         {/***************** FORGOT PASSWORD BUTTON *****************/}
@@ -80,6 +207,17 @@ const Login = props => {
           </TouchableOpacity>
         </View>
 
+        <View style={[tw`w-full pt-32`]}>
+          {/******************** LOGIN BUTTON *********************/}
+
+          <FillButton
+            name={'Login'}
+            onPress={() => {
+              handleSubmit()
+            }}
+          />
+        </View>
+
 
       </View>
     );
@@ -89,6 +227,7 @@ const Login = props => {
 
   return (
     <KeyboardAvoidingView
+      keyboardVerticalOffset={20}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       enabled={false}
       style={[tw`h-full `]}>
@@ -128,16 +267,10 @@ const Login = props => {
             {isPhone ? <Phone /> : <Email />}
           </View>
 
-          <View style={[tw`w-full absolute bottom-12`]}>
-            {/******************** LOGIN BUTTON *********************/}
 
-            <FillButton
-              name={'Login'}
-              onPress={() => navigation.navigate('Code')}
-            />
-          </View>
         </View>
       </SafeAreaView>
+      <Toast />
     </KeyboardAvoidingView>
   );
 };
@@ -179,7 +312,8 @@ const styles = StyleSheet.create({
     padding: 15,
     marginTop: 10,
     borderRadius: 5,
-    height: 55,
+    height: 50,
+    width: '90%',
     paddingVertical: 0,
   },
   // Login Btn Styles

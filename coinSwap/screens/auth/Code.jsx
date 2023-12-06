@@ -1,89 +1,209 @@
-import { View, Text, StyleSheet, TextInput } from 'react-native';
-import React, { useRef } from 'react';
+import { View, Text, StyleSheet, Alert, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../../components/BackButton';
-import { COLORS } from '../../constants';
 import FillButton from '../../components/FillButton';
+import { AuthContext } from '../../context/auth-context';
+import { TextInput } from 'react-native-gesture-handler';
+import { COLORS } from '../../constants';
 
 
 const Code = ({ value, disabled, onChange }) => {
-    const navigation = useNavigation();
+    const lengthInput = 6
+    const defaultCountdown = 5
 
-    const inputRefs = useRef([])
 
-    // const onChangeValue = ({ text, index }) => {
-    //     const newValue = value.map((item, valueIndex) => {
-    //         if (valueIndex === index) {
-    //             return text
-    //         }
-    //         return item
-    //     })
+    const [internalVal, setInternalVal] = useState('')
+    const [enableResend, setEnableResend] = useState(false)
+    const [countdown, setCountdown] = useState(defaultCountdown)
 
-    //     onChange(newValue)
-    // }
+    const navigation = useNavigation()
 
-    const handleChange = (text, index) => {
-        // onChangeValue(text, index)
+    let clockCall = null
+    let textInput = useRef(null)
 
-        if (text.length !== 0) {
-            return inputRefs?.current[index + 1]?.focus()
+    const onChangeText = (val) => {
+        setInternalVal(val)
+        if (val.length == lengthInput) {
+            navigation.navigate('BottomNavigation')
+            setInternalVal('')
         }
-
-        return inputRefs?.current[index - 1]?.focus()
     }
+
+    const decrementClock = () => {
+        if (countdown === 0) {
+            setEnableResend(true)
+            setCountdown(0)
+            clearInterval(clockCall)
+        } else
+            setCountdown(countdown - 1)
+    }
+
+    const onResendOTP = () => {
+        if (enableResend) {
+            setCountdown(defaultCountdown)
+            setEnableResend(false)
+            clearInterval(clockCall)
+            clockCall = setInternalVal(() => {
+                decrementClock(0)
+            }, 1000)
+        }
+    }
+
+    const onChangeNumber = () => {
+        setInternalVal('')
+    }
+
+    useEffect(() => {
+        clockCall = setInterval(() => {
+            decrementClock()
+        }, 1000)
+        return () => {
+            clearInterval(clockCall)
+        }
+    })
+
+    useEffect(() => {
+        textInput.focus()
+    }, [])
+
+
     return (
-        <SafeAreaView style={[tw`m-4 h-full flex-1 relative h-full`]}>
-            <BackButton />
-            <View style={[tw`mt-16`]}>
-                <View>
-                    <Text>Enter Passcode</Text>
-                    <View style={[tw`mt-8 flex flex-row w-full justify-between`]}>
-                        {[...new Array(6)].map((item, index) => (
-                            <TextInput
-                                ref={ref => {
-                                    if (ref && !inputRefs.current.includes(ref)) {
-                                        inputRefs.current = [...inputRefs.current, ref]
-                                    }
-                                }}
-                                key={index}
-                                style={[tw`w-12 h-12 border border-blue-900 rounded text-center flex mb-4`]}
-                                maxLength={1}
-                                contextMenuHidden
-                                selectTextOnFocus
-                                editable={!disabled}
-                                keyboardType='decimal-pad'
-                                testID={`Code-${index}`}
-                                onChangeText={text => handleChange(text, index)}
-                            />
-                        ))}
+        <View style={styles.container}>
+            <KeyboardAvoidingView
+                keyboardVerticalOffset={50}
+                behavior={'padding'}
+                style={styles.containerAvoidingView}
+            >
+                <BackButton />
+                <View style={{ marginTop: 40 }}>
+                    <Text style={styles.textTitle}>{'Input your OTP code via SMS'}</Text>
+                    <View>
+                        <TextInput
+                            ref={(input) => textInput = input}
+                            onChangeText={onChangeText}
+                            style={{ width: 20, height: 20 }}
+                            value={internalVal}
+                            maxLength={lengthInput}
+                            returnKeyType='done'
+                            keyboardType='numeric'
+                            secureTextEntry={true}
+                        />
+                        <View style={styles.containerInput}>
+                            {
+                                Array(lengthInput).fill().map((data, index) => (
+                                    <View
+                                        style={[styles.cellView,
+                                            // {
+                                            //     borderBottomColor: index === internalVal.length ? COLORS.gradientForm : COLORS.dark
+                                            // }
+                                        ]}
+                                        key={index}
+                                    >
+                                        <Text
+                                            style={styles.cellText}
+                                            onPress={() => textInput.focus()}
+                                        >
+                                            {internalVal && internalVal.length > 0 ? internalVal[index] : ''}
+                                        </Text>
+                                    </View>
+                                ))
+                            }
+                        </View>
+                    </View>
+                    <View style={styles.bottomView}>
+                        <TouchableOpacity onPress={() => navigation.navigate('BottomNavigation')}>
+                            <View style={styles.btnChangeNumber}>
+                                <Text style={styles.textChange}>
+                                    Change Number
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={onResendOTP}>
+                            <View style={styles.btnResend}>
+                                <Text style={[styles.textResend,
+                                {
+                                    color: enableResend ? '#234db7' : 'gray'
+                                }
+                                ]}>
+                                    Resend OTP {`[ ${countdown}s ]`}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
-            </View>
-            <View style={[tw`absolute bottom-8 w-full`]}>
-                <FillButton
-                    name={'Submit Passcode'}
-                    onPress={() => navigation.navigate('BottomNavigation')}
-                />
-            </View>
-        </SafeAreaView>
+            </KeyboardAvoidingView>
+        </View>
     )
 }
 
 export default Code
 
 const styles = StyleSheet.create({
-    loginBtnWrapper: {
-        height: 55,
-        marginTop: 60,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.4,
-        shadowRadius: 3,
-        elevation: 5,
+    container: {
+        flex: 1,
+        padding: 10
     },
+    containerAvoidingView: {
+        flex: 1,
+        alignItems: 'center',
+        padding: 10
+    },
+    textTitle: {
+        marginTop: 20,
+        marginBottom: 50,
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    containerInput: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    cellView: {
+        paddingVertical: 11,
+        width: 40,
+        margin: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderBottomWidth: 1.5
+    },
+    cellText: {
+        textAlign: 'center',
+        fontSize: 16,
+        fontWeight: 'bold'
+    },
+    bottomView: {
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'space-between',
+        marginBottom: 50,
+        alignItems: 'flex-end'
+    },
+    btnChangeNumber: {
+        width: 150,
+        height: 50,
+        borderRadius: 10,
+        alignItems: 'flex-start',
+        justifyContent: 'center'
+    },
+    textChange: {
+        color: COLORS.primary,
+        fontSize: 16
+    },
+    btnResend: {
+        width: 150,
+        height: 50,
+        borderRadius: 10,
+        alignItems: 'flex-end',
+        justifyContent: 'center'
+    },
+    textResend: {
+        alignItems: 'center'
+
+    }
+
 })

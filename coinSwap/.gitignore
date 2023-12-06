@@ -42,8 +42,9 @@ yarn-error.log
 
 
 #Environments
-.env
-env/
+/.env
+/env
+/node_modules
 
 # fastlane
 #

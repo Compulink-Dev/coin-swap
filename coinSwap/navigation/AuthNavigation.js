@@ -15,9 +15,13 @@ import {
   Congratulation,
   Email,
   Code,
+  Forgot,
 } from '../screens';
-import { HomeNaviagation } from '.';
 import BottomNavigation from './BottomNavigation';
+import Password from '../screens/auth/Password';
+
+
+
 
 const Stack = createStackNavigator();
 
@@ -75,6 +79,11 @@ const AuthNavigation = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name={'Forgot'}
+        component={Forgot}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name={'PassCode'}
         component={PassCode}
         options={{ headerShown: false }}
@@ -90,8 +99,8 @@ const AuthNavigation = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={'Home'}
-        component={HomeNaviagation}
+        name={'Password'}
+        component={Password}
         options={{ headerShown: false }}
       />
       <Stack.Screen

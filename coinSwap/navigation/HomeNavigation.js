@@ -1,5 +1,5 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import {
   Transaction,
   Transactions,
@@ -9,7 +9,6 @@ import {
   SendUnregistered,
   SendMoney,
   SendCredits,
-  PayCredits,
 } from '../screens';
 import WalletNavigation from './WalletNavigation';
 
@@ -21,52 +20,47 @@ const HomeNavigation = () => {
       <Stack.Screen
         name={'Home'}
         component={Home}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={'Transaction'}
         component={Transaction}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={'Transactions'}
         component={Transactions}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={'WalletNavigation'}
         component={WalletNavigation}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={'SendRegistered'}
         component={SendRegistered}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={'SendUnregistered'}
         component={SendUnregistered}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={'SendMoney'}
         component={SendMoney}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={'SendCredits'}
         component={SendCredits}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name={'PayCredits'}
-        component={PayCredits}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={'AddUser'}
         component={AddUser}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

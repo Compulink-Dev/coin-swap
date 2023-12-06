@@ -12,6 +12,7 @@ export { default as PassCode } from './auth/PassCode';
 export { default as Code } from './auth/Code';
 export { default as Congratulation } from './auth/Congratulation';
 export { default as Email } from './auth/Email';
+export { default as Forgot } from './auth/Forgot';
 
 ('Home');
 export { default as Home } from './home/Home';
@@ -27,4 +28,3 @@ export { default as AddUser } from './home/AddUser';
 export { default as Payment } from './home/Payment';
 export { default as Statistics } from './home/Statistics';
 export { default as SendCredits } from './home/SendCredits';
-export { default as PayCredits } from './home/PayCredits';
