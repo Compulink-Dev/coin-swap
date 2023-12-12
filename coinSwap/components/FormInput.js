@@ -2,7 +2,7 @@ import { View, Text, TextInput } from 'react-native';
 import React from 'react';
 import tw from 'tailwind-react-native-classnames';
 
-export default function FormInput({ placeholder, name, onChange, type, value, focusable }) {
+export default function FormInput({ placeholder, name, onChange, type, value, focusable, placeholderTextColor }) {
 
   return (
     <View style={[tw``]}>
@@ -15,6 +15,7 @@ export default function FormInput({ placeholder, name, onChange, type, value, fo
           keyboardType={type}
           value={value}
           focusable={focusable}
+          placeholderTextColor={placeholderTextColor}
         />
       </View>
     </View>

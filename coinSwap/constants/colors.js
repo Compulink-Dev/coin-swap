@@ -6,7 +6,7 @@ export default {
   bgColor: '#82ccdd',
   warning: '#f0d500',
   danger: '#FF0D0E',
-  gray: '#666666',
+  gray: '#848884',
   grayLight: '#ccc',
   black: '#0a0a0a',
 };

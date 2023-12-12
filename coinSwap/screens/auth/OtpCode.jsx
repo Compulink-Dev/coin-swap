@@ -9,6 +9,7 @@ import { AuthContext } from '../../context/auth-context';
 import { TextInput } from 'react-native-gesture-handler';
 import { COLORS } from '../../constants';
 import Toast from 'react-native-toast-message'
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 
 const OtpCode = ({ value, disabled, onChange }) => {
@@ -94,7 +95,7 @@ const OtpCode = ({ value, disabled, onChange }) => {
       >
         <BackButton />
         <View style={{ marginTop: 40 }}>
-          <Text style={styles.textTitle}>{'Input your OTP code via SMS'}</Text>
+          <Text style={[styles.textTitle, { color: COLORS.gray }]}>{'Input your OTP code via SMS'}</Text>
           <View>
             <TextInput
               ref={(input) => textInput = input}
@@ -103,7 +104,7 @@ const OtpCode = ({ value, disabled, onChange }) => {
               value={internalVal}
               maxLength={lengthInput}
               returnKeyType='done'
-              keyboardType='number-pad'
+              keyboardType='numeric'
             />
             <View style={styles.containerInput}>
               {
@@ -171,7 +172,8 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     fontSize: 16,
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: COLORS.gray
   },
   containerInput: {
     flexDirection: 'row',

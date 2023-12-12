@@ -5,6 +5,7 @@ import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../../components/BackButton';
 import { COLORS } from '../../constants';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 const PassCode = () => {
   const navigation = useNavigation();
@@ -15,7 +16,7 @@ const PassCode = () => {
         <BackButton />
 
         <View style={[tw`mt-28 flex items-center`]}>
-          <Text style={[tw`text-3xl font-bold`]}>Enter passcodes</Text>
+          <Text style={[tw`text-3xl font-bold`, { color: COLORS.gray }]}>Enter passcodes</Text>
         </View>
 
         <View style={[tw`mt-10 flex justify-center items-center`]}>

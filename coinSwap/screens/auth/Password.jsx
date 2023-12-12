@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native'
 import FillButton from '../../components/FillButton'
 import { AuthContext } from '../../context/auth-context'
 import Toast from 'react-native-toast-message';
+import { COLORS } from '../../constants'
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 const Password = () => {
 
@@ -14,8 +16,8 @@ const Password = () => {
 
     const { test } = useContext(AuthContext)
 
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
     const [errors, setErrors] = useState({})
 
     const validateForm = () => {
@@ -32,9 +34,9 @@ const Password = () => {
 
     const handleSubmit = () => {
         if (validateForm()) {
-            console.log('Submitted', password);
-            setPassword('')
-            setConfirmPassword('')
+            console.log('Submitted', password, confirmPassword);
+            setPassword("")
+            setConfirmPassword("")
             setErrors({})
             navigation.navigate('Register')
         }
@@ -97,26 +99,29 @@ const Password = () => {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             enabled={false}
             style={[tw`h-full `]}>
-            <SafeAreaView style={[tw`m-4 h-full`]}>
+            <SafeAreaView style={[tw`m-4 h-full`, styles.container]}>
                 <BackButton />
                 <View style={[tw`mt-16`]}>
-                    <View style={[tw``]}>
-                        <Text style={[tw`text-2xl font-bold`]}>Password</Text>
-                        <Text style={[tw` text-gray-400 `]}>Enter your password</Text>
+
+                    <View style={[tw``, styles.title]}>
+                        <Text style={[tw`text-2xl font-bold`, { color: COLORS.primary }]}>Password</Text>
+                        <Text style={{ color: COLORS.gray }}>Enter your password</Text>
                         <Text>{test}</Text>
                     </View>
 
-                    <View>
-                        <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} onChangeText={onChangePassword} />
-                        {
-                            errors.password ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.password}</Text> : null
-                        }
-                    </View>
-                    <View>
-                        <TextInput style={styles.input} placeholder="Confirm Password" secureTextEntry={true} onChangeText={onChangeConfirmPassword} />
-                        {
-                            errors.password ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.confirmPassword}</Text> : null
-                        }
+                    <View style={styles.inputWrapper}>
+                        <View>
+                            <TextInput style={[styles.input, { borderColor: errors.password ? "red" : COLORS.gray }]} placeholder="Password" secureTextEntry={true} onChangeText={onChangePassword} placeholderTextColor={COLORS.gray} />
+                            {
+                                errors.password ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.password}</Text> : null
+                            }
+                        </View>
+                        <View>
+                            <TextInput style={[styles.input, { borderColor: errors.confirmPassword ? "red" : COLORS.gray }]} placeholder="Confirm Password" secureTextEntry={true} onChangeText={onChangeConfirmPassword} placeholderTextColor={COLORS.gray} />
+                            {
+                                errors.password ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.confirmPassword}</Text> : null
+                            }
+                        </View>
                     </View>
                 </View>
 
@@ -135,6 +140,15 @@ const Password = () => {
 export default Password
 
 const styles = StyleSheet.create({
+    container: {
+        height: hp(100)
+    },
+    title: {
+        height: hp(10)
+    },
+    inputWrapper: {
+        height: hp(20)
+    },
     input: {
         borderWidth: 1,
         borderColor: '#ccc',
@@ -143,5 +157,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         height: 55,
         paddingVertical: 0,
+        color: COLORS.dark
     },
 });

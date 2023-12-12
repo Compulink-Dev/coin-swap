@@ -3,6 +3,8 @@ require('dotenv').config()
 require('./db')
 
 
+const userRouter = require('./routes/user-route')
+
 const PORT = process.env.PORT
 const app = express()
 
@@ -18,10 +20,12 @@ app.use((req, res, next) => {
     next()
 })
 
+app.use('/user', userRouter)
+
 
 
 app.get("/", (req, res) => {
-    console.log("Hello you");
+    console.log("Hello");
     res.send("Hello there")
 })
 

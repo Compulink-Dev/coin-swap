@@ -1,31 +1,43 @@
-const { Schema, model } = require("mongoose")
+const { Schema, model, default: mongoose } = require("mongoose")
 
 const userScheme = new Schema({
-    username: {
+    name: {
+        type: String,
+        required: true,
+    },
+    surname: {
         type: String,
         required: true
     },
     email: {
         type: String,
         required: true
-    }, authentication: {
-        password: {
-            type: String,
-            required: true,
-            select: false
-        }, salt: {
-            type: String,
-            select: false
-        },
-        sessionToken: {
-            type: String,
-            select: false
-        }
+    },
+    password: {
+        type: String,
+        required: true,
+        select: false
+    },
+    confirm_password: {
+        type: String,
+        required: true,
+        select: false
+    },
+    phone_number: {
+        type: Number,
+        required: true,
+    },
+    country_code: {
+        type: Number,
+    },
+    service_provider: {
+        type: Number,
+
     }
 })
 
 
-export const UserModel = model("User", userScheme)
+const userMOdel = mongoose.model('User', userScheme)
 
 
-const getUsers = () => UserModel.find()
+module.exports = UserModel

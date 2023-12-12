@@ -6,16 +6,6 @@ import FaIcon from 'react-native-vector-icons/FontAwesome';
 import { transaction } from '../constants/data';
 
 const TransactionCard = () => {
-  const transactions = [
-    { name: '', image: '', time: '', description: '', id: 1, amount: 20 },
-    { name: '', image: '', time: '', description: '', id: 2, amount: 20 },
-    { name: '', image: '', time: '', description: '', id: 3, amount: 20 },
-    { name: '', image: '', time: '', description: '', id: 4, amount: 20 },
-    { name: '', image: '', time: '', description: '', id: 5, amount: 20 },
-    { name: '', image: '', time: '', description: '', id: 6, amount: 20 },
-    { name: '', image: '', time: '', description: '', id: 7, amount: 20 },
-    { name: '', image: '', time: '', description: '', id: 8, amount: 20 },
-  ];
 
   return (
     <View style={[tw`w-full  shadow-lg  bg-white`]}>

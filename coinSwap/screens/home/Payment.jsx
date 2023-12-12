@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Modal, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, Modal, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
@@ -9,6 +9,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import { merchants } from '../../constants/data';
 import Toast from 'react-native-toast-message';
+import { COLORS } from '../../constants';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 const Payment = () => {
   const navigation = useNavigation();
@@ -78,7 +80,7 @@ const Payment = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       enabled={false}
       style={[tw`h-full `]}>
-      <SafeAreaView style={[tw`m-4 h-full flex-1`]}>
+      <SafeAreaView style={[tw`m-4 h-full flex-1`, styles.container]}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -89,7 +91,7 @@ const Payment = () => {
           }}>
           <View style={[tw`flex-1 justify-center items-center`]}>
             <View style={[tw`w-3/4 bg-white px-4 py-8 shadow-lg rounded-lg`]}>
-              <Text style={[tw`text-center my-4 text-lg font-bold`]}>
+              <Text style={[tw`text-center my-4 text-lg font-bold text-gray-500`]}>
                 Do you want to continue with the payment.
               </Text>
               <View
@@ -115,14 +117,16 @@ const Payment = () => {
 
         <BackButton />
         <View style={[tw`flex flex-col justify-between h-full`]}>
-          <View style={[tw`mt-8`]}>
+          <View style={[tw`mt-8`, styles.input]}>
             <View style={[tw`mt-8`]}>
-              <Text style={[tw`font-bold text-lg`]}>Pay Credits</Text>
+              <Text style={[tw`font-bold text-lg`, { color: COLORS.primary }]}>Pay Credits</Text>
               <View>
-                <Text style={[tw`font-bold mt-4`]}>Search</Text>
                 <Picker
                   selectedValue={selectedMerchant}
                   value={selectedMerchant}
+                  style={{ color: COLORS.gray }}
+                  placeholder={COLORS.gray}
+                  dropdownIconColor={COLORS.gray}
                   onValueChange={(itemValue, itemIndex) =>
                     setSelectedMerchant(itemValue)
                   }>
@@ -140,12 +144,13 @@ const Payment = () => {
                 </View>
               </View>
               <View style={[tw`mt-4`]}>
-                <Text>Amount</Text>
+                <Text style={{ color: COLORS.gray }}>Amount</Text>
                 <TextInput
                   placeholder="$ 0.00"
                   keyboardType="number-pad"
+                  placeholderTextColor={COLORS.gray}
                   value={amount}
-                  style={[tw`border-b border-gray-400 p-2`]}
+                  style={[tw`border-b border-gray-400 p-2`, { color: COLORS.gray }]}
                   onChangeText={onChangeAmount}
                 />
               </View>
@@ -157,7 +162,7 @@ const Payment = () => {
             </View>
           </View>
 
-          <View style={[tw`flex-col justify-center mt-44 `, { gap: 10 }]}>
+          <View style={[tw`flex-col justify-center mt-44 `, { gap: 10 }, styles.input]}>
             <FillButton
               name="Confirm"
               onPress={() => handleSubmit()}
@@ -172,3 +177,16 @@ const Payment = () => {
 };
 
 export default Payment;
+
+
+const styles = StyleSheet.create({
+  container: {
+    height: hp(100)
+  },
+  input: {
+    height: hp(20)
+  },
+  button: {
+    height: hp(10)
+  }
+})

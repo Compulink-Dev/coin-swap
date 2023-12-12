@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Modal, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, Modal, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
@@ -10,6 +10,8 @@ import { useNavigation } from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
 import SelectDropdown from 'react-native-select-dropdown';
 import Toast from 'react-native-toast-message';
+import { COLORS } from '../../constants';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 export default function SendUnRegistered() {
   const navigation = useNavigation();
@@ -103,7 +105,7 @@ export default function SendUnRegistered() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       enabled={false}
       style={[tw`h-full `]}>
-      <SafeAreaView style={[tw`m-4 h-full flex-1 relative`]}>
+      <SafeAreaView style={[tw`m-4 h-full flex-1 relative`, styles.container]}>
 
         <Modal
           animationType="slide"
@@ -115,7 +117,7 @@ export default function SendUnRegistered() {
           }}>
           <View style={[tw`flex-1 justify-center items-center`]}>
             <View style={[tw`w-3/4 bg-white px-4 py-8 shadow-lg rounded-lg`]}>
-              <Text style={[tw`text-center my-4 text-lg font-bold`]}>
+              <Text style={[tw`text-center my-4 text-lg font-bold`, { color: `${COLORS.gray}` }]}>
                 Do you want to continue with the payment
               </Text>
               <View
@@ -140,31 +142,38 @@ export default function SendUnRegistered() {
         </Modal>
 
         <BackButton />
-        <View style={[tw`mt-8 flex flex-col`, { gap: 2 }]}>
-          <FormInput
-            placeholder="Full Name"
-            onChange={onChangeName}
+        <View style={[tw`mt-10 flex flex-col`, { gap: 2 }, styles.input]}>
+          <TextInput
+            placeholder={'Full Name'}
+            style={[tw`border border-gray-300 p-2 rounded-lg mt-4`, { borderColor: errors.name ? "red" : COLORS.gray, color: COLORS.gray }]}
+            onChangeText={onChangeName}
             value={name}
+            placeholderTextColor={errors.name ? "red" : COLORS.gray}
           />
           <View>
             {
               errors.name ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.name}</Text> : null
             }
           </View>
-          <FormInput
-            placeholder="ID Number"
-            onChange={onChangeAccount}
+          <TextInput
+            placeholder={'ID Number'}
+            style={[tw`border border-gray-300 p-2 rounded-lg mt-2`, { borderColor: errors.name ? "red" : COLORS.gray, color: COLORS.gray }]}
+            onChangeText={onChangeAccount}
             value={account}
+            placeholderTextColor={errors.account ? "red" : COLORS.gray}
           />
           <View>
             {
               errors.account ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.account}</Text> : null
             }
           </View>
-          <FormInput
-            placeholder="Phone Number"
-            onChange={onChangePhone}
+          <TextInput
+            placeholder={'Phone number'}
+            style={[tw`border border-gray-300 p-2 rounded-lg mt-2`, { borderColor: errors.name ? "red" : COLORS.gray, color: COLORS.gray }]}
+            onChangeText={onChangePhone}
+            keyboardType='numeric'
             value={phone}
+            placeholderTextColor={errors.phone ? "red" : COLORS.gray}
           />
           <View>
             {
@@ -172,13 +181,14 @@ export default function SendUnRegistered() {
             }
           </View>
           <View style={[tw`mt-4`]}>
-            <Text>Enter Amount</Text>
+            <Text style={{ color: errors.amount ? "red" : `${COLORS.gray}` }}>Enter Amount</Text>
             <TextInput
               placeholder="$ 0.00"
               keyboardType="number-pad"
               value={amount}
-              style={[tw`border-b border-b-2 border-gray-400 `]}
+              style={[tw`border-b border-b-2 border-gray-400 `, { borderColor: errors.name ? "red" : COLORS.gray, color: COLORS.gray }]}
               onChange={onChangeAmount}
+              placeholderTextColor={errors.amount ? "red" : COLORS.gray}
             />
           </View>
           <View>
@@ -190,7 +200,9 @@ export default function SendUnRegistered() {
 
 
         </View>
-        <View style={[tw`my-4 flex flex-col justify-center absolute bottom-0 w-full`, { gap: 10 }]}>
+
+
+        <View style={[tw`my-4 flex flex-col justify-center absolute bottom-0 w-full`, { gap: 10 }, styles.button]}>
           <FillButton name="Confirm"
             onPress={() => handleSubmit()}
           />
@@ -201,3 +213,15 @@ export default function SendUnRegistered() {
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: hp(100)
+  },
+  input: {
+    height: hp(20)
+  },
+  button: {
+    height: hp(10)
+  }
+})

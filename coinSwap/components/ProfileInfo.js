@@ -3,7 +3,6 @@ import {
   Modal,
   StyleSheet,
   Text,
-  TextInput,
   ScrollView,
   Alert,
   KeyboardAvoidingView,
@@ -13,10 +12,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import FillButton from './FillButton';
 import Icon from "react-native-vector-icons/FontAwesome"
+import McIcon from "react-native-vector-icons/MaterialCommunityIcons"
+import MIcon from "react-native-vector-icons/MaterialIcons"
 import OutlineButton from './OutlineButton';
 import FormInput from './FormInput';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import { COLORS } from '../constants';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 const ProfileInfo = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -105,7 +108,7 @@ const ProfileInfo = () => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       enabled={false}
-      style={[tw``]}>
+      style={[tw``, styles.container]}>
       <SafeAreaView>
         <Modal
           animationType="slide"
@@ -117,7 +120,7 @@ const ProfileInfo = () => {
           }}>
           <View style={[tw`flex-1 justify-center items-center`]}>
             <View style={[tw`w-3/4 bg-white px-4 py-2 shadow-lg rounded-lg`]}>
-              <Text style={[tw`text-lg font-bold`]}>
+              <Text style={[tw`text-lg font-bold`, { color: `${COLORS.primary}` }]}>
                 Edit your profile
               </Text>
 
@@ -185,46 +188,53 @@ const ProfileInfo = () => {
         </Modal>
 
         <View style={[tw`h-full`]}>
-          <Text style={[tw`font-bold text-lg text-gray-400`]}>Profile</Text>
+          <Text style={[tw`font-bold text-lg text-gray-400`, { color: `${COLORS.primary}` }]}>Profile</Text>
+
           <ScrollView>
-            <View style={[tw`flex flex-row items-center justify-center my-6`, { gap: 40 }]}>
+            <View style={[tw`flex flex-row items-center justify-center my-6`, { gap: 40 }, styles.header]}>
               <View style={[tw`flex items-center justify-center`]}>
-                <Text style={[tw`text-4xl font-bold`]}>34</Text>
-                <Text style={[tw``]}>Merchants</Text>
+                <Text style={[tw`text-4xl font-bold`, { color: `${COLORS.primary}` }]}>34</Text>
+                <Text style={[tw``, { color: `${COLORS.primary}` }]}>Merchants</Text>
               </View>
               <View style={[tw`flex items-center justify-center`]}>
-                <Text style={[tw`text-4xl font-bold`]}>12</Text>
-                <Text style={[tw``]}>Clients</Text>
+                <Text style={[tw`text-4xl font-bold`, { color: `${COLORS.primary}` }]}>12</Text>
+                <Text style={[tw``, { color: `${COLORS.primary}` }]}>Clients</Text>
               </View>
               <View style={[tw`flex items-center justify-center`]}>
-                <Text style={[tw`text-4xl font-bold`]}>45</Text>
-                <Text style={[tw``]}>Transactions</Text>
+                <Text style={[tw`text-4xl font-bold`, { color: `${COLORS.primary}` }]}>45</Text>
+                <Text style={[tw``, { color: `${COLORS.primary}` }]}>Transactions</Text>
               </View>
             </View>
-            <View style={[tw`pt-2 flex `, { gap: 10 }]}>
-              <View style={[tw`flex flex-row items-center justify-between`]}>
-                <Text style={[tw``]}></Text>
-                <Text style={[tw``]}></Text>
-              </View>
-              <View style={[tw`flex flex-row items-center justify-center`, { gap: 20 }]}>
-                <Icon name='envelope-o' style={[tw`text-2xl flex-1`]} />
-                <Text style={[tw`text-sm`]}>lloydm@compulink.co.zw</Text>
-              </View>
-              <View style={[tw`flex flex-row items-center justify-center`, { gap: 20 }]}>
-                <Icon name='mobile' style={[tw`text-3xl flex-1`]} />
-                <Text style={[tw`text-sm`]}>+236 778 191 278</Text>
-              </View>
-              <View style={[tw`flex flex-row items-center justify-center`, { gap: 20 }]}>
-                <Icon name='user' style={[tw`text-2xl flex-1`]} />
-                <Text style={[tw`text-sm`]}>Sales Rep</Text>
-              </View>
-              <View style={[tw`flex flex-row items-center justify-center`, { gap: 20 }]}>
-                <Icon name='map-pin' style={[tw`text-2xl flex-1`]} />
-                <Text style={[tw`text-sm`]}>Harare</Text>
-              </View>
 
+            <View style={[tw`border rounded`, { borderColor: COLORS.primary }, styles.content]}>
+              <View style={[tw`flex `, { gap: 10 }]}>
+
+                <View style={[tw`flex flex-row items-center justify-center p-2`, { gap: 20 }]}>
+                  <McIcon name='email' style={[tw`text-3xl flex-1`, { color: `${COLORS.primary}` }]} />
+                  <Text style={[tw`text-sm`, { color: `${COLORS.primary}` }]}>lloydm@compulink.co.zw</Text>
+                </View>
+                <View style={[tw`w-full`, { height: 1, backgroundColor: COLORS.grayLight }]} />
+
+                <View style={[tw`flex flex-row items-center justify-center px-2`, { gap: 20 }]}>
+                  <McIcon name='phone' style={[tw`text-3xl flex-1`, { color: `${COLORS.primary}` }]} />
+                  <Text style={[tw`text-sm`, { color: `${COLORS.primary}` }]}>+236 778 191 278</Text>
+                </View>
+                <View style={[tw`w-full`, { height: 1, backgroundColor: COLORS.grayLight }]} />
+
+                <View style={[tw`flex flex-row items-center justify-center px-2`, { gap: 20 }]}>
+                  <MIcon name='person' style={[tw`text-3xl flex-1`, { color: `${COLORS.primary}` }]} />
+                  <Text style={[tw`text-sm`, { color: `${COLORS.primary}` }]}>Sales Rep</Text>
+                </View>
+                <View style={[tw`w-full`, { height: 1, backgroundColor: COLORS.grayLight }]} />
+
+                <View style={[tw`flex flex-row items-center justify-center p-2`, { gap: 20 }]}>
+                  <MIcon name='location-on' style={[tw`text-3xl flex-1`, { color: `${COLORS.primary}` }]} />
+                  <Text style={[tw`text-sm`, { color: `${COLORS.primary}` }]}>Harare</Text>
+                </View>
+              </View>
             </View>
           </ScrollView>
+
           <View style={tw`absolute bottom-8 w-full`}>
             <FillButton
               name="Edit Profile"
@@ -279,6 +289,19 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
+  container: {
+    height: hp(65)
+  },
+  header: {
+    height: hp(5)
+  },
+  select: {
+    height: hp(5)
+  },
+  content: {
+    height: hp(35)
+  }
 });
 
 export default ProfileInfo;
+

@@ -26,5 +26,7 @@ export { default as Transaction } from './home/Transaction';
 export { default as Transactions } from './home/Transactions';
 export { default as AddUser } from './home/AddUser';
 export { default as Payment } from './home/Payment';
-export { default as Statistics } from './home/Statistics';
 export { default as SendCredits } from './home/SendCredits';
+
+
+export { default as Settings } from '../components/Settings'

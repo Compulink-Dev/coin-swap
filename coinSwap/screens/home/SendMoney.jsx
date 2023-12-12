@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import FillButton from '../../components/FillButton';
 import OutlineButton from '../../components/OutlineButton';
 import { COLORS } from '../../constants';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 const SendMoney = () => {
   const navigation = useNavigation();

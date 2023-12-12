@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../../constants';
 import { TextInput } from 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 const AddUser = () => {
   const navigation = useNavigation();

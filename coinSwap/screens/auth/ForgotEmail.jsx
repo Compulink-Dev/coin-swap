@@ -6,6 +6,7 @@ import FillButton from '../../components/FillButton';
 import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 const ForgotEmail = () => {
   const navigation = useNavigation();

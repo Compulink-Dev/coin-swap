@@ -3,6 +3,7 @@ import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import Icon from 'react-native-vector-icons/FontAwesome6'
+import { COLORS } from '../constants';
 
 
 const Info = ({ icon, value, title }) => {
@@ -13,7 +14,7 @@ const Info = ({ icon, value, title }) => {
       </View>
       <View style={[tw``]}>
         <Text style={[tw`text-2xl font-bold text-blue-900`]}>{value}</Text>
-        <Text style={[tw`text-xs font-bold`]}>{title}</Text>
+        <Text style={[tw`text-xs font-bold`, { color: `${COLORS.primary}` }]}>{title}</Text>
       </View>
     </View>
   )
@@ -23,7 +24,7 @@ export default function PaymentInfo() {
   return (
     <SafeAreaView>
       <View style={[tw``]}>
-        <Text style={[tw`text-lg text-gray-400 font-bold`]}>Statistics</Text>
+        <Text style={[tw`text-lg text-gray-400 font-bold`, { color: `${COLORS.primary}` }]}>Statistics</Text>
       </View>
       <View style={[tw`flex flex-row  flex-wrap items-center justify-between`, { gap: 6 }]}>
         <Info

@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View, Button, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
+import { COLORS } from '../../constants'
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 const OtpPass = () => {
 
@@ -24,7 +26,7 @@ const OtpPass = () => {
                 behavior={'padding'}
                 style={styles.containerAvoidingView}
             >
-                <Text style={styles.titleStyle}>{'Input your OTP code via SMS'}</Text>
+                <Text style={[styles.titleStyle, { color: COLORS.gray }]}>{'Input your OTP code via SMS'}</Text>
                 <View>
                     <TextInput
                         ref={(input) => textInput = input}

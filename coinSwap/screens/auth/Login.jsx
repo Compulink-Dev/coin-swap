@@ -17,6 +17,9 @@ import BackButton from '../../components/BackButton';
 import { COLORS } from '../../constants';
 import { AuthContext } from '../../context/auth-context';
 import Toast from 'react-native-toast-message';
+import flag from '../../assets/flag.png'
+import Icon from 'react-native-vector-icons/AntDesign';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 
 const Login = props => {
@@ -27,13 +30,15 @@ const Login = props => {
   const Email = ({ mail }) => {
 
 
-    const [email, setEmail] = useState()
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const [errors, setErrors] = useState({})
 
     const validateForm = () => {
       let errors = {}
 
       if (!email) errors.email = 'Email is required'
+      if (!password) errors.password = 'Password is required'
 
       setErrors(errors)
 
@@ -44,6 +49,7 @@ const Login = props => {
       if (validateForm()) {
         console.log('Submitted', email);
         setEmail('')
+        setPassword('')
         setErrors({})
         navigation.navigate('Code')
       }
@@ -57,62 +63,110 @@ const Login = props => {
       console.log(email);
     }
 
+    const onChangePassword = (password) => {
+      setPassword(password)
+      console.log(password);
+    }
+
+
     const showErrorToast = () => {
-      Toast.show({
-        type: 'error',
-        text1: 'Error logging in',
-        text2: 'Please enter correct email',
-        visibilityTime: 2000
-      })
+      if (!email) {
+        Toast.show({
+          type: 'error',
+          text1: 'Error logging in',
+          text2: 'Please enter correct email',
+          visibilityTime: 2000
+        })
+      }
+
+      if (!password) {
+        Toast.show({
+          type: 'error',
+          text1: 'Error logging in',
+          text2: 'Please enter correct password',
+          visibilityTime: 2000
+        })
+      }
+
+      if (!email && !password) {
+        Toast.show({
+          type: 'error',
+          text1: 'Error logging in',
+          text2: 'Please fill in the detail below',
+          visibilityTime: 2000
+        })
+      }
     }
 
     return (
-      <View style={[tw``]}>
-        <View>
-          <TextInput
-            style={[styles.input, tw`w-full`]}
-            placeholder="Email"
-            secureTextEntry={false}
-            value={email}
-            onChangeText={onChangeEmail}
-          />
-          {
-            errors.email ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.email}</Text> : null
-          }
-        </View>
-        {/***************** FORGOT PASSWORD BUTTON *****************/}
-        <View style={[tw`flex items-start w-full`]}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('ForgotEmail', {
-                userId: 'X0001',
-              })
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={30}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        enabled={false}
+        style={[tw`h-full`, styles.phone]}>
+        <View style={[tw``]}>
+          <View>
+            <TextInput
+              style={[styles.input, tw`w-full`, { color: COLORS.dark, borderColor: errors.email ? 'red' : COLORS.grayLight }]}
+              placeholder="Email"
+              secureTextEntry={false}
+              value={email}
+              onChangeText={onChangeEmail}
+              placeholderTextColor={errors.email ? "red" : COLORS.gray}
+            />
+            {
+              errors.email ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.email}</Text> : null
             }
-            style={styles.forgotPassBtn}>
-            <Text
-              style={[
-                tw`text-center font-bold mt-4`,
-                { color: `${COLORS.primary}` },
-              ]}>
-              Lost access to my email ?
-            </Text>
-          </TouchableOpacity>
+          </View>
+          <View>
+            <TextInput
+              style={[styles.input, tw`w-full`, { color: errors.email ? "red" : COLORS.dark, borderColor: errors.password ? 'red' : COLORS.grayLight }]}
+              placeholder="Password"
+              secureTextEntry={true}
+              value={password}
+              onChangeText={onChangePassword}
+              placeholderTextColor={COLORS.gray}
+            />
+            {
+              errors.password ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.password}</Text> : null
+            }
+          </View>
+          {/***************** FORGOT PASSWORD BUTTON *****************/}
+          <View style={[tw`flex items-start w-full`]}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('ForgotEmail', {
+                  userId: 'X0001',
+                })
+              }
+              style={styles.forgotPassBtn}>
+              <Text
+                style={[
+                  tw`text-center font-bold mt-4`,
+                  { color: `${COLORS.primary}` },
+                ]}>
+                Lost access to my email ?
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={[tw`w-full pt-20`]}>
+            {/******************** LOGIN BUTTON *********************/}
+
+            <FillButton
+              name={'Login'}
+              onPress={() => {
+                handleSubmit()
+              }}
+            />
+          </View>
         </View>
-
-        <View style={[tw`w-full pt-32`]}>
-          {/******************** LOGIN BUTTON *********************/}
-
-          <FillButton
-            name={'Login'}
-            onPress={() => {
-              handleSubmit()
-            }}
-          />
-        </View>
-
-      </View>
+      </KeyboardAvoidingView>
     );
   };
+
+
+  {/**  Phone Component    */ }
 
   const Phone = ({ phone }) => {
 
@@ -169,57 +223,92 @@ const Login = props => {
 
 
     return (
-      <View style={[tw`w-full`]}>
-        <View style={[tw`flex flex-row items-center`]}>
-          <Text style={{ marginRight: 8, fontWeight: 'bold', color: 'black' }}>{"+263 |"}</Text>
-          <TextInput
-            style={[styles.input, tw``, { color: 'black' }]}
-            placeholder="778 191 278"
-            focusable={true}
-            keyboardType='number-pad'
-            value={phoneNumber}
-            onChangeText={onChangePhone}
-          />
-
-        </View>
-        <View>
-          {
-            errors.phoneNumber ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.phoneNumber}</Text> : null
-          }
-        </View>
-
-        {/***************** FORGOT PASSWORD BUTTON *****************/}
-        <View style={[tw`flex items-start w-full `]}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('ForgotNumber', {
-                userId: 'X0001',
-              })
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={20}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        enabled={false}
+        style={[tw`h-full`, styles.phone]}>
+        <View style={[tw`w-full`]}>
+          <View style={{ width: "100%", paddingHorizontal: 0, paddingVertical: 10 }}>
+            <View style={{ flexDirection: "row" }}>
+              <TouchableOpacity style={{
+                width: 50,
+                height: 50,
+                marginHorizontal: 5,
+                borderBottomColor: errors.phoneNumber ? 'red' : COLORS.gray,
+                borderBottomWidth: 1,
+                flexDirection: "row",
+                fontSize: 12
+              }}>
+                <View style={{ justifyContent: "center", marginRight: 5 }}>
+                  <Icon name="down" color={errors.phoneNumber ? "red" : COLORS.gray} />
+                </View>
+                <View style={{ justifyContent: "center", marginRight: 20 }}>
+                  <Image
+                    source={flag}
+                    resizeMode='contain'
+                    style={{
+                      width: 30,
+                      height: 30
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+              <View style={{ width: '85%' }}>
+                <TextInput
+                  style={{
+                    flex: 1,
+                    borderBottomColor: errors.phoneNumber ? "red" : COLORS.gray,
+                    borderBottomWidth: 1,
+                    height: 40,
+                    fontSize: 20,
+                    color: '#111',
+                    width: '100%',
+                    fontSize: 16
+                  }}
+                  placeholder='Phone number'
+                  placeholderTextColor={errors.phoneNumber ? "red" : COLORS.gray}
+                  keyboardType='number-pad'
+                  value={phoneNumber}
+                  onChangeText={onChangePhone}
+                />
+              </View>
+            </View>
+          </View>
+          <View>
+            {
+              errors.phoneNumber ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.phoneNumber}</Text> : null
             }
-            style={styles.forgotPassBtn}>
-            <Text
-              style={[
-                tw`text-center  font-bold mt-4`,
-                { color: `${COLORS.primary}` },
-              ]}>
-              Lost access to my phone number ?
-            </Text>
-          </TouchableOpacity>
+          </View>
+
+          <View style={[tw`flex items-start w-full `]}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('ForgotNumber', {
+                  userId: 'X0001',
+                })
+              }
+              style={styles.forgotPassBtn}>
+              <Text
+                style={[
+                  tw`text-center  font-bold mt-4`,
+                  { color: `${COLORS.primary}` },
+                ]}>
+                Lost access to my phone number ?
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={[tw`w-full pt-40`]}>
+            <FillButton
+              name={'Login'}
+              onPress={() => {
+                handleSubmit()
+              }}
+            />
+          </View>
         </View>
-
-        <View style={[tw`w-full pt-32`]}>
-          {/******************** LOGIN BUTTON *********************/}
-
-          <FillButton
-            name={'Login'}
-            onPress={() => {
-              handleSubmit()
-            }}
-          />
-        </View>
-
-
-      </View>
+      </KeyboardAvoidingView>
     );
   };
 
@@ -230,7 +319,7 @@ const Login = props => {
       keyboardVerticalOffset={20}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       enabled={false}
-      style={[tw`h-full `]}>
+      style={[tw`h-full`, styles.phone]}>
       <SafeAreaView style={[tw`relative`, styles.main]}>
         <View style={[tw``, styles.container]}>
           <View
@@ -240,13 +329,15 @@ const Login = props => {
             <BackButton />
           </View>
           <View style={styles.wFull}>
+
             <View style={styles.row}>
               <Image
                 source={require('../../assets/transfer.png')}
-                style={[tw`w-44 h-44`]}
+                style={[tw`w-36 h-36`]}
               />
             </View>
-            <View style={[tw`flex-row justify-center py-8 `]}>
+
+            <View style={[tw`flex-row justify-center py-8`]}>
               <TouchableOpacity
                 style={[
                   tw` px-4 py-2 rounded-tl-3xl rounded-bl-3xl`,
@@ -264,10 +355,11 @@ const Login = props => {
                 <Text style={[tw`text-white font-bold`]}>Email</Text>
               </TouchableOpacity>
             </View>
-            {isPhone ? <Phone /> : <Email />}
+
+            <View style={styles.select}>
+              {isPhone ? <Phone /> : <Email />}
+            </View>
           </View>
-
-
         </View>
       </SafeAreaView>
       <Toast />
@@ -286,7 +378,7 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 15,
-    width: '100%',
+    width: wp(100),
     position: 'relative',
     flex: 1,
     alignItems: 'center',
@@ -305,6 +397,9 @@ const styles = StyleSheet.create({
     color: '#666666',
     marginBottom: 16,
     fontWeight: 'bold',
+  },
+  button: {
+    height: hp(14)
   },
   input: {
     borderWidth: 1,
@@ -375,8 +470,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
+    height: hp(20)
   },
   mr7: {
     marginRight: 7,
   },
+  select: {
+    height: hp(40)
+  }
 });

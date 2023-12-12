@@ -1,7 +1,7 @@
 export const merchants = [
     {
         id: 0,
-        name: "",
+        name: "OK",
         value: "",
         image: "",
     },
@@ -83,6 +83,20 @@ export const transaction = [
     {
         id: 7,
         name: 'Lloyd Arthur',
+        date: '08.23 - Wed 08 Mar',
+        money: '$250.00',
+        status: 'Successful'
+    },
+    {
+        id: 8,
+        name: 'Tariro Arthur',
+        date: '08.23 - Wed 08 Mar',
+        money: '$250.00',
+        status: 'Successful'
+    },
+    {
+        id: 9,
+        name: 'Kelvin Nyasha',
         date: '08.23 - Wed 08 Mar',
         money: '$250.00',
         status: 'Successful'

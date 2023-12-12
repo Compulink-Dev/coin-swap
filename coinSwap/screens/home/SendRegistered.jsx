@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Modal, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, Modal, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
@@ -7,6 +7,9 @@ import FillButton from '../../components/FillButton';
 import OutlineButton from '../../components/OutlineButton';
 import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
+import { COLORS } from '../../constants';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
+
 
 export default function SendRegistered() {
 
@@ -36,7 +39,7 @@ export default function SendRegistered() {
       console.log('Submitted', account, phone);
       setPhone('')
       setAccount('')
-      setAmount('0')
+      setAmount('')
       setErrors({})
       setModalVisible(!modalVisible)
     }
@@ -100,7 +103,7 @@ export default function SendRegistered() {
           }}>
           <View style={[tw`flex-1 justify-center items-center`]}>
             <View style={[tw`w-3/4 bg-white px-4 py-8 shadow-lg rounded-lg`]}>
-              <Text style={[tw`text-center my-4 text-lg font-bold`]}>
+              <Text style={[tw`text-center my-4 text-lg font-bold`, { color: COLORS.gray }]}>
                 Do you want to continue with the payment
               </Text>
               <View
@@ -126,18 +129,19 @@ export default function SendRegistered() {
 
 
         <BackButton />
-        <View style={[tw`pt-4 flex justify-between h-full`]}>
-          <View style={[tw`mt-8`]}>
+        <View style={[tw`pt-4 flex justify-between h-full`, styles.container]}>
+          <View style={[tw`mt-8`, styles.input]}>
             <View style={[tw`mt-8`]}>
               <View>
-                <Text>Account ID</Text>
+                <Text style={{ color: errors.account ? 'red' : `${COLORS.gray}` }}>Account ID</Text>
                 <TextInput
                   placeholder="Account ID"
                   keyboardType="number-pad"
-                  style={[tw`border border-gray-300 p-2 rounded-lg mt-2`]}
+                  style={[tw`border border-gray-300 p-2 rounded-lg mt-2`, { borderColor: errors.account ? "red" : COLORS.gray, color: COLORS.gray }]}
                   secureTextEntry={false}
                   value={account}
                   onChangeText={onChangeAccount}
+                  placeholderTextColor={errors.account ? "red" : COLORS.gray}
                 />
               </View>
               <View>
@@ -148,14 +152,15 @@ export default function SendRegistered() {
             </View>
             <View style={[tw`mt-4`]}>
               <View>
-                <Text>Phone Number</Text>
+                <Text style={{ color: errors.phone ? 'red' : `${COLORS.gray}` }}>Phone Number</Text>
                 <TextInput
                   placeholder="Phone Number"
                   keyboardType="number-pad"
-                  style={[tw`border border-gray-300 p-2 rounded-lg mt-2`]}
+                  style={[tw`border border-gray-300 p-2 rounded-lg mt-2`, { borderColor: errors.phone ? "red" : COLORS.gray, color: COLORS.gray }]}
                   secureTextEntry={false}
                   value={phone}
                   onChangeText={onChangePhone}
+                  placeholderTextColor={errors.phone ? "red" : COLORS.gray}
                 />
               </View>
               <View>
@@ -166,15 +171,16 @@ export default function SendRegistered() {
             </View>
             <View style={[tw`my-8`]}>
               <View style={[tw``]}>
-                <Text style={[tw`font-bold text-lg`]}>
+                <Text style={[tw`font-bold text-lg`, { color: errors.amount ? 'red' : `${COLORS.gray}` }]}>
                   Enter Amount
                 </Text>
                 <TextInput
                   placeholder="$ 0.00"
                   keyboardType="number-pad"
                   value={amount}
+                  placeholderTextColor={errors.amount ? "red" : COLORS.gray}
                   style={[
-                    tw`border-b border-b-2 border-gray-400 p-2`,
+                    tw`border-b border-b-2 border-gray-400 p-2`, { color: `${COLORS.gray}`, borderColor: errors.amount ? 'red' : COLORS.gray }
                   ]}
                   onChangeText={onChangeAmount}
                 />
@@ -188,9 +194,9 @@ export default function SendRegistered() {
           </View>
 
         </View>
-        <View style={[tw`absolute bottom-2 w-full`]}>
+        <View style={[tw`absolute bottom-2 w-full`, styles.button]}>
           <FillButton
-            name="Send Credits"
+            name="Send Credit"
             onPress={() => handleSubmit()}
           />
           <View style={{ marginTop: 10 }}>
@@ -202,3 +208,16 @@ export default function SendRegistered() {
     </KeyboardAvoidingView>
   );
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    height: hp(100)
+  },
+  input: {
+    height: hp(20)
+  },
+  button: {
+    height: hp(10)
+  }
+})

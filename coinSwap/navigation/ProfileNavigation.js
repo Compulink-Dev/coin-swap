@@ -1,6 +1,6 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {Profile, Statistics} from '../screens';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Profile, Settings } from '../screens';
 
 const Stack = createStackNavigator();
 
@@ -10,12 +10,12 @@ const ProfileNavigation = () => {
       <Stack.Screen
         name={'Profile'}
         component={Profile}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={'Statistics'}
-        component={Statistics}
-        options={{headerShown: false}}
+        name={'Settings'}
+        component={Settings}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

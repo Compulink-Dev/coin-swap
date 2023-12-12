@@ -70,3 +70,7 @@ yarn-error.log
 
 # testing
 /coverage
+
+# amplify
+.amplify
+amplifyconfiguration*

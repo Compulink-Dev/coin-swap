@@ -6,6 +6,7 @@ import FormInput from '../../components/FormInput';
 import FillButton from '../../components/FillButton';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 const ForgotNumber = () => {
   const navigation = useNavigation();

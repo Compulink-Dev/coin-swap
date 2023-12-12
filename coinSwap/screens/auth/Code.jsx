@@ -8,6 +8,7 @@ import FillButton from '../../components/FillButton';
 import { AuthContext } from '../../context/auth-context';
 import { TextInput } from 'react-native-gesture-handler';
 import { COLORS } from '../../constants';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 
 const Code = ({ value, disabled, onChange }) => {
@@ -79,7 +80,7 @@ const Code = ({ value, disabled, onChange }) => {
             >
                 <BackButton />
                 <View style={{ marginTop: 40 }}>
-                    <Text style={styles.textTitle}>{'Input your OTP code via SMS'}</Text>
+                    <Text style={[styles.textTitle, { color: COLORS.gray }]}>{'Input your OTP code via SMS'}</Text>
                     <View>
                         <TextInput
                             ref={(input) => textInput = input}
