@@ -7,7 +7,7 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
 } from 'react-native';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../../components/BackButton';
@@ -22,10 +22,37 @@ const Email = () => {
 
   const { test } = useContext(AuthContext)
 
+
   const [name, setName] = useState('')
+  const [validName, setValidName] = useState(false);
+  const [nameFocus, setNameFocus] = useState(false);
+
+
   const [surname, setSurname] = useState('')
+  const [validSurname, setValidSurname] = useState(false);
+  const [surnameFocus, setSurnameFocus] = useState(false);
+
+
   const [email, setEmail] = useState('')
+  const [validEmail, setValidEmail] = useState(false);
+  const [emailFocus, setEmailFocus] = useState(false);
+
+
   const [errors, setErrors] = useState({})
+
+  // Refs
+  const nameRef = useRef();
+  const surnameRef = useRef();
+  const emailRef = useRef();
+  const errRef = useRef();
+
+  const [errMsg, setErrMsg] = useState('');
+  const [success, setSuccess] = useState(false);
+
+
+  const NAME_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+  const SURNAME_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+  const EMAIL_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 
   const validateForm = () => {
     let errors = {}
@@ -39,7 +66,7 @@ const Email = () => {
     return Object.keys(errors).length === 0
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
     if (validateForm()) {
       console.log('Submitted', email);
       setEmail('')
@@ -47,6 +74,7 @@ const Email = () => {
       setSurname('')
       setErrors({})
       navigation.navigate('Password')
+      e.preventDefault()
     }
     else {
       showErrorToast()
@@ -117,6 +145,19 @@ const Email = () => {
     }
   }
 
+  useEffect(() => {
+    nameRef.current.focus();
+  }, [])
+
+  useEffect(() => {
+    setValidName(NAME_REGEX.test(name));
+    setValidSurname(SURNAME_REGEX.test(surname));
+    setValidEmail(EMAIL_REGEX.test(email));
+  }, [name, surname, email])
+
+  useEffect(() => {
+    setErrMsg('');
+  }, [name, surname, email])
 
 
   return (
@@ -136,19 +177,25 @@ const Email = () => {
 
           <View style={styles.inputWrapper}>
             <View>
-              <TextInput value={name} style={[styles.input, { borderColor: errors.name ? "red" : COLORS.gray }]} placeholder="Name" onChangeText={onChangeName} placeholderTextColor={errors.name ? "red" : COLORS.gray} />
+              <TextInput
+                id={'name'}
+                ref={nameRef}
+                value={name}
+                onFocus={() => setNameFocus(true)}
+                onBlur={() => setNameFocus(false)}
+                style={[styles.input, { borderColor: errors.name ? "red" : COLORS.gray }]} placeholder="Name" onChangeText={onChangeName} placeholderTextColor={errors.name ? "red" : COLORS.gray} />
               {
                 errors.name ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.name}</Text> : null
               }
             </View>
             <View>
-              <TextInput value={surname} style={[styles.input, { borderColor: errors.surname ? "red" : COLORS.gray }]} placeholder="Surname" onChangeText={onChangeSurname} placeholderTextColor={errors.name ? "red" : COLORS.gray} />
+              <TextInput ref={surnameRef} value={surname} style={[styles.input, { borderColor: errors.surname ? "red" : COLORS.gray }]} placeholder="Surname" onChangeText={onChangeSurname} placeholderTextColor={errors.name ? "red" : COLORS.gray} />
               {
                 errors.surname ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.surname}</Text> : null
               }
             </View>
             <View>
-              <TextInput style={[styles.input, { borderColor: errors.email ? "red" : COLORS.gray }]} value={email} placeholder="Email" onChangeText={onChangeEmail} placeholderTextColor={errors.name ? "red" : COLORS.gray} />
+              <TextInput ref={emailRef} style={[styles.input, { borderColor: errors.email ? "red" : COLORS.gray }]} value={email} placeholder="Email" onChangeText={onChangeEmail} placeholderTextColor={errors.name ? "red" : COLORS.gray} />
               {
                 errors.email ? <Text style={{ color: 'red', marginBottom: 10 }}>{errors.email}</Text> : null
               }
